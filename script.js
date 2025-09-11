@@ -142,29 +142,26 @@ function validateForm(formElement) {
 }
 
 // Add countdown timer functionality (for urgency)
-function addCountdownTimer(targetDate) {
+function addCountdownTimer() {
     const timerElement = document.getElementById('countdown-timer');
     if (!timerElement) return;
-    
+
+    let timeLeft = 540; // 9 minutos em segundos (9 * 60)
+
     function updateTimer() {
-        const now = new Date().getTime();
-        const distance = targetDate - now;
-        
-        if (distance < 0) {
-            timerElement.innerHTML = "OFERTA EXPIRADA";
-            return;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerElement.innerHTML = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        timeLeft--; // Decrementa 1 segundo
+
+        if (timeLeft < 0) {
+            timeLeft = 540; // Reinicia para 9 minutos quando chegar a zero
         }
-        
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-        timerElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
-    
-    updateTimer();
-    setInterval(updateTimer, 1000);
+
+    updateTimer(); // Inicia imediatamente
+    setInterval(updateTimer, 1000); // Atualiza a cada segundo
 }
 
 // Initialize all animations when DOM is loaded
@@ -180,10 +177,10 @@ document.addEventListener('DOMContentLoaded', function() {
     ctaButtons.forEach(button => {
         button.addEventListener('click', function() {
             console.log('CTA button clicked');
-            // Removido o alerta, pois o redirecionamento é feito pelo HTML
+            // Redirecionamento é feito pelo HTML
         });
     });
 
-    // Add countdown timer for urgency
-    addCountdownTimer(new Date('2025-09-08').getTime());
+    // Add countdown timer for urgency (fictício)
+    addCountdownTimer();
 });
